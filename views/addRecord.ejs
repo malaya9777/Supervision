@@ -1,0 +1,50 @@
+<h6>Add New Record</h6>
+<div class="row">
+    <div class="col-sm-2">
+        <label for="ps">Police Station</label>
+        <select name="ps" id="ps" class="form-select" required>
+            <option value="">Select Police Station</option>
+            <% data.ps_list.forEach((d,i)=>{ %>
+                <option value="<%= d.cctnsdbName%>"><%= d.name%></option>
+            <% })%>
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <label for="caseNo">Case No</label>
+        <input type="text" name="caseNo" class="form-control" placeholder="Case No" required>
+    </div>
+    <div class="col-sm-2">
+        <label for="caseYear">Case Year</label>
+        <input type="number" name="caseYear" class="form-control" placeholder="Case Year" required>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-sm-2">
+        <label for="caseType">Case Type</label>
+        <select name="caseType" id="caseType" class="form-select" required>
+            <option value="">Select Case Type</option>
+            <% data.type_list.forEach((d,i)=>{ %>
+                <option value="<%= d._id%>"><%= d.name%></option>
+            <% })%>
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <label for="officer">Select Officer</label>
+        <select name="officer" id="officer" class="form-select" required>
+            <option value="">Select Case Type</option>
+            <% data.officer_list.forEach((d,i)=>{ %>
+                <option value="<%= d._id%>"><%= d.name%></option>
+            <% })%>
+        </select>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-sm-2">        
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+<script>
+    window.onload =(event)=>{
+        document.getElementById('ps').focus()
+    }
+</script>

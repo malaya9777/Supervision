@@ -1,0 +1,48 @@
+<h4><u>Office</u></h4>
+
+
+<form action="/configuration/office" method="POST">
+    <div class="row mt-2">
+        <div class="col-lg-3">
+            <input type="text" name="name" id="name" required class="form-control"
+                placeholder="Office's name" autocomplete="off" />
+        </div>
+        <div class="col-lg-3">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+</form>
+
+<hr>
+<h6><u>Offices List</u></h6>
+<div class="row mt-2">
+    <div class="col-lg-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Office</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(office_list){office_list.forEach((data, i)=>{%>
+                    <tr>
+                        <td><%= i+1 %></td>
+                        <td>
+                            <%= data.name %>
+                            <input type="text" name="name" id="name" required class="form-control"
+                            placeholder="Office's name" autocomplete="off" value="<%= data.name %>" hidden />
+                        </td>
+                        <td><button type="button" class="btn btn-sm btn-success" onclick="setEdit(this)">Edit</button></td>
+                    </tr>
+                <%})}%>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+</script>

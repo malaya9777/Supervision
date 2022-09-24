@@ -1,0 +1,42 @@
+<div class="row mt-2">
+  <p>Your excel must have these three column.</p>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <table class="table table-bordered">
+      <thead>
+        <tr class="table-success">
+          <th>PS</th>
+          <th>FIR No</th>
+          <th>FIR Year</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+<div class="accordion" id="accordionExample">
+<% data.type_list.forEach((d,i)=>{%>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading<%= d._id %>">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item<%= d._id %>" aria-expanded="true" aria-controls="<%= d._id %>">
+        Import <%= d.name %>
+      </button>
+    </h2>
+    <div id="item<%= d._id %>" class="accordion-collapse collapse" aria-labelledby="heading<%= d._id %>" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <form action="/imports" method="post" enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-sm-4">
+            <input required type="file" name="excelFile" accept=".xlsx,application/msexcel" class="form-control">
+            <input type="hidden" value="<%= d._id %>" name="type">
+          </div>
+          <div class="col-sm-2">
+            <button type="submit" class="btn btn-success">Import</button>
+          </div>
+        </div>
+      </form>           
+      </div>
+    </div>
+  </div>
+<%})%>
+</div>

@@ -1,0 +1,50 @@
+<h4><u>Police Stations</u></h4>
+
+
+<form action="/configuration/policeStation" method="POST">
+    <div class="row mt-2">
+        <div class="col-lg-3">
+            <input type="text" name="name" id="name" required class="form-control"
+                placeholder="Police Station's name" autocomplete="off" />
+        </div>
+        <div class="col-lg-3">
+            <input type="text" name="cctnsdbName" id="cctnsdbName" required class="form-control"
+                placeholder="CCTNS Database Name" autocomplete="off" />
+        </div>
+        <div class="col-lg-3">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+</form>
+
+<hr>
+<h6><u>Police Stations List</u></h6>
+<div class="row mt-2">
+    <div class="col-lg-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Police Station</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(ps_list){ps_list.forEach((data, i)=>{%>
+                    <tr>
+                        <td><%= i+1 %></td>
+                        <td>
+                            <%= data.name %>
+                            <input type="text" name="name" id="name" required class="form-control"
+                            placeholder="Police Station's name" autocomplete="off" value="<%= data.name %>" hidden />
+                        </td>
+                        <td><button type="button" class="btn btn-sm btn-success" onclick="setEdit(this)">Edit</button></td>
+                    </tr>
+                <%})}%>               
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+</script>

@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-3">
+        <h6>Your data for <span class="badge bg-success"><%= data._type.name %></span> successfully uploaded</h6>
+    </div>
+    <div class="col-md-auto">
+      <a class="btn btn-primary" href="/imports/confirmed/<%= data._type._id %>">Confirm</a>
+    </div>
+    <div class="col-md-auto">
+      <a class="btn btn-secondary" href="/imports/cancled/<%= data._type._id %>">Cancle</a>
+    </div>    
+</div>
+<div class="row">
+    <div class="col-sm-6">
+      <table class="table table-bordered">
+        <thead>
+          <tr class="table-success">
+            <th>#</th>
+            <th>PS</th>
+            <th>FIR No</th>
+            <th>FIR Year</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% data.rows.forEach((d,i)=>{%>
+                <tr>
+                  <td><%= i+1 %></td>
+                    <td><%= d.PS %></td>
+                    <td><%= d.FIRNo %></td>
+                    <td><%= d.FIRYear %></td>
+                </tr>
+            <%})%>
+        </tbody>
+      </table>
+    </div>
+  </div>
