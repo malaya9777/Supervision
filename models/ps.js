@@ -12,6 +12,11 @@ const psSchema = mongoose.Schema({
         unique:true,
         trim:true,
         required:true
+    },
+    icName:{
+        type:mongoose.Schema.Types.ObjectId,
+        trim:true,
+        ref:'Officer'
     }
 
 },{timestamps:true});

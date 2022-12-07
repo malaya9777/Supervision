@@ -1,50 +1,109 @@
-<h6>Add New Record</h6>
-<div class="row">
-    <div class="col-sm-2">
-        <label for="ps">Police Station</label>
-        <select name="ps" id="ps" class="form-select" required>
-            <option value="">Select Police Station</option>
-            <% data.ps_list.forEach((d,i)=>{ %>
-                <option value="<%= d.cctnsdbName%>"><%= d.name%></option>
-            <% })%>
-        </select>
-    </div>
-    <div class="col-sm-2">
-        <label for="caseNo">Case No</label>
-        <input type="text" name="caseNo" class="form-control" placeholder="Case No" required>
-    </div>
-    <div class="col-sm-2">
-        <label for="caseYear">Case Year</label>
-        <input type="number" name="caseYear" class="form-control" placeholder="Case Year" required>
-    </div>
+<div class="alert alert-danger fade" id="alert" role="alert">
+    <strong>Record already exist!</strong> please re-check and confirm.    
 </div>
-<div class="row mt-3">
-    <div class="col-sm-2">
-        <label for="caseType">Case Type</label>
-        <select name="caseType" id="caseType" class="form-select" required>
-            <option value="">Select Case Type</option>
-            <% data.type_list.forEach((d,i)=>{ %>
-                <option value="<%= d._id%>"><%= d.name%></option>
-            <% })%>
-        </select>
+<h6>Add New Case Details</h6>
+<form action="/record" method="post">
+    <div class="row">
+        <div class="col-sm-2">
+            <label for="ps">Police Station</label>
+            <select name="ps" id="ps" class="form-select" required onchange="check()">
+                <option value="">Select Police Station</option>
+                <% data.ps_list.forEach((d,i)=>{ %>
+                    <option value="<%= d.cctnsdbName%>">
+                        <%= d.name%>
+                    </option>
+                    <% })%>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <label for="caseNo">Case No</label>
+            <input type="number" name="caseNo" id="caseNo" class="form-control" placeholder="Case No" required
+                onchange="check()">
+        </div>
+        <div class="col-sm-2">
+            <label for="caseYear">Case Year</label>
+            <input type="number" name="caseYear" id="caseYear" class="form-control" placeholder="Case Year" required
+                onchange="check()">
+        </div>
     </div>
-    <div class="col-sm-2">
-        <label for="officer">Select Officer</label>
-        <select name="officer" id="officer" class="form-select" required>
-            <option value="">Select Case Type</option>
-            <% data.officer_list.forEach((d,i)=>{ %>
-                <option value="<%= d._id%>"><%= d.name%></option>
-            <% })%>
-        </select>
+    <div class="row mt-3">
+        <div class="col-sm-2">
+            <label for="majorHead">Major Head</label>
+            <select name="majorHead" id="majorHead" class="form-select" required onchange="populateMinorHead(this)">
+                <option value="">Select Major Head</option>
+                <% data.majorheadlist.forEach((d,i)=>{ %>
+                    <option value="<%= d._id%>">
+                        <%= d.name%>
+                    </option>
+                    <% })%>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <label for="minorHead">Major Head</label>
+            <select name="minorHead" id="minorHead" class="form-select" required>
+
+            </select>
+        </div>
     </div>
-</div>
-<div class="row mt-3">
-    <div class="col-sm-2">        
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="row mt-3">
+        <div class="col-sm-auto">
+            <a id="resetBtn" class="btn btn-secondary" href="/record">Reset</a>
+        </div>
+        <div class="col-sm-auto">
+            <button type="submit" id="submitBtn" class="btn btn-primary" disabled>Submit</button>
+        </div>
+        <div class="col-sm-auto">
+            <button id="submitNxtBtn" class="btn btn-primary" disabled>Submit | Next</button>
+        </div>
     </div>
-</div>
+</form>
 <script>
-    window.onload =(event)=>{
-        document.getElementById('ps').focus()
+    window.onload = (event) => {
+        document.getElementById('ps').focus();
     }
+    function check() {
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitNxtBtn').disabled = true;
+        let alertPanel = document.getElementById('alert');
+        let ps = document.getElementById('ps').value;
+        let caseNo = document.getElementById('caseNo').value;
+        let caseYear = document.getElementById('caseYear').value;
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/record/check");
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.responseText === 'true') {
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('submitNxtBtn').disabled = false;
+                    alertPanel.classList.remove('show');
+                    return true;
+                } else {
+                    alertPanel.classList.add('show');
+                    return false;                    
+                }
+
+            }
+        };
+        xhr.send(`ps=${ps}&caseNo=${caseNo}&caseYear=${caseYear}`);
+    }
+
+    function populateMinorHead(object) {
+        let minorHeads = document.getElementById('minorHead');
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "/record/minorHead/" + object.value);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let heads = JSON.parse(xhr.response);
+                let innerText = '<option value="">Select Minor Head</option>';
+                heads.forEach((d, i) => {
+                    innerText += `<option value='${d._id}'>${d.name}</option>`;
+                });
+                minorHeads.innerHTML = innerText;
+            }
+        }
+        xhr.send();
+
+    }
+
 </script>

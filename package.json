@@ -4,7 +4,7 @@
   "description": "supervision monitoring",
   "main": "supervision.js",
   "scripts": {
-    "test": "nodemon supervision.js"
+    "test": "nodemon dcrb.js"
   },
   "keywords": [
     "supervision",

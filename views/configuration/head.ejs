@@ -1,0 +1,53 @@
+<h6>Create/Edit Head</h6>
+
+<form action="/configuration/head/create/majorHead" method="POST">
+    <div class="row mt-2">
+        <div class="col-lg-3">
+            <input type="text" name="name" id="name" required class="form-control"
+                placeholder="Major Head" autocomplete="off" />
+        </div>
+        <div class="col-lg-3">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+</form>
+<hr>
+<div class="accordion" id="accordionPanelsStayOpenExample">
+    <% majorHeads.forEach((i,o)=>{%>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ID<%= i._id %>" aria-controls="panelsStayOpen-collapseOne">
+                <%= i.name %>
+              </button>
+            </h2>
+            <div id="ID<%= i._id %>" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+              <div class="accordion-body bg-lite">
+                <form action="/configuration/head/create/minorHead" method="POST">
+                    <div class="row mt-2">
+                        <div class="col-lg-3">
+                            <input type="hidden" name="majorHeadID" id="majorHeadID" value="<%= i._id%>">
+                            <input type="text" name="name" id="name" required class="form-control"
+                                placeholder="Minor Head" autocomplete="off" />
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="submit" class="btn btn-sm btn-primary">Add</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <div class="list-group list-group-numbered">
+                                <% i.minorHeads.forEach((m,o)=>{%>
+                                    <div class="list-group-item"><%= m.name %></div>
+                                <%})%>
+                                             
+                        </div>
+                    </div>
+                </div>               
+                <hr>
+                <button class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+          </div>
+    <%})%>    
+  </div>

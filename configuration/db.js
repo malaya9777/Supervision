@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const dbURL = "mongodb://127.0.0.1:27017/supervision";
+const dbURL = "mongodb://127.0.0.1:27017/dcrb";
 
 const initializeMongoServer = async ()=>{
     try{

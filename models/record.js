@@ -15,20 +15,41 @@ const record = mongoose.Schema({
         type:Number,
         require:true
     },
-    caseDate:{
-        type:Date,        
+    majorHead:{
+        type:mongoose.Schema.Types.ObjectId,
+        require:true,
+        ref:'MajorHead'
+    },
+    minorHead:{
+        type:mongoose.Schema.Types.ObjectId,
+        require:true,
+        ref:'MinorHead'
     },
     caseType:{
         type: mongoose.Schema.Types.ObjectId,
         require: true,
         ref: 'Type'
     },
-    superviosaryOfficer:{
-        type:String,
+    investigatingOfficer:{
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: 'Officer'
+    },
+    supervisingOfficer:{
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: 'Officer'
     },
     status:{
         type:Boolean,
         default:false
+    },
+    caseID:{
+        type:String,
+        require:true,
+        unique:true,
+        trim:true
     }
+    
 },{timestamps:true});
 module.exports =mongoose.model('Record', record);
