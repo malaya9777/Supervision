@@ -1,15 +1,15 @@
 <div class="alert alert-danger fade" id="alert" role="alert">
-    <strong>Record already exist!</strong> please re-check and confirm.    
+    <strong>Record already exist!</strong> please re-check and confirm.
 </div>
 <h6>Add New Case Details</h6>
-<form action="/record" method="post">
+<form action="/addRecord" method="post">
     <div class="row">
         <div class="col-sm-2">
             <label for="ps">Police Station</label>
             <select name="ps" id="ps" class="form-select" required onchange="check()">
                 <option value="">Select Police Station</option>
                 <% data.ps_list.forEach((d,i)=>{ %>
-                    <option value="<%= d.cctnsdbName%>">
+                    <option value="<%= d._id%>">
                         <%= d.name%>
                     </option>
                     <% })%>
@@ -21,9 +21,8 @@
                 onchange="check()">
         </div>
         <div class="col-sm-2">
-            <label for="caseYear">Case Year</label>
-            <input type="number" name="caseYear" id="caseYear" class="form-control" placeholder="Case Year" required
-                onchange="check()">
+            <label for="caseDate">Date</label>
+            <input type="date" name="caseDate" id="caseDate" class="form-control" required onchange="check()">
         </div>
     </div>
     <div class="row mt-3">
@@ -39,67 +38,84 @@
             </select>
         </div>
         <div class="col-sm-2">
-            <label for="minorHead">Major Head</label>
-            <select name="minorHead" id="minorHead" class="form-select" required>
+            <label for="subHead">Sub Head</label>
+            <select name="subHead" id="subHead" class="form-select" required>
 
             </select>
         </div>
+
     </div>
     <div class="row mt-3">
-        <div class="col-sm-auto">
-            <a id="resetBtn" class="btn btn-secondary" href="/record">Reset</a>
+        <div class="col-sm-5">
+            <label for="sections">Section of Law</label>
+            <textarea name="sections" id="sections" class="form-control" cols="30" rows="2" required></textarea>
         </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-sm-auto">
             <button type="submit" id="submitBtn" class="btn btn-primary" disabled>Submit</button>
         </div>
         <div class="col-sm-auto">
             <button id="submitNxtBtn" class="btn btn-primary" disabled>Submit | Next</button>
         </div>
+        <div class="col-sm-auto">
+            <a id="resetBtn" class="btn btn-secondary" href="/addRecord">Reset</a>
+        </div>
     </div>
 </form>
 <script>
+    let ps = document.getElementById('ps');
+    let caseNo = document.getElementById('caseNo');
+
     window.onload = (event) => {
         document.getElementById('ps').focus();
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('ps')) {
+            ps.value = urlParams.get('ps');
+            caseNo.value = urlParams.get('caseNo');
+            check();    
+        }
     }
+
     function check() {
         document.getElementById('submitBtn').disabled = true;
         document.getElementById('submitNxtBtn').disabled = true;
         let alertPanel = document.getElementById('alert');
-        let ps = document.getElementById('ps').value;
-        let caseNo = document.getElementById('caseNo').value;
-        let caseYear = document.getElementById('caseYear').value;
+
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "/record/check");
+        xhr.open("POST", "/api/check");
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                if (xhr.responseText === 'true') {
-                    document.getElementById('submitBtn').disabled = false;
-                    document.getElementById('submitNxtBtn').disabled = false;
-                    alertPanel.classList.remove('show');
-                    return true;
-                } else {
+                console.log(xhr.response)
+                if (xhr.response) {
                     alertPanel.classList.add('show');
-                    return false;                    
+                    return false;
+                } else {
+                    if (ps && caseNo && caseDate) {
+                        document.getElementById('submitBtn').disabled = false;
+                        document.getElementById('submitNxtBtn').disabled = false;
+                        alertPanel.classList.remove('show');
+                        return true;
+                    }
                 }
-
             }
         };
-        xhr.send(`ps=${ps}&caseNo=${caseNo}&caseYear=${caseYear}`);
+        xhr.send(`ps=${ps.value}&caseNo=${caseNo.value}&caseDate=${caseDate.value}`);
     }
 
     function populateMinorHead(object) {
-        let minorHeads = document.getElementById('minorHead');
+        let subHeads = document.getElementById('subHead');
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", "/record/minorHead/" + object.value);
+        xhr.open("GET", "/api/subHead/" + object.value);
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let heads = JSON.parse(xhr.response);
-                let innerText = '<option value="">Select Minor Head</option>';
+                let innerText = '<option value="">Select Sub Head</option>';
                 heads.forEach((d, i) => {
                     innerText += `<option value='${d._id}'>${d.name}</option>`;
                 });
-                minorHeads.innerHTML = innerText;
+                subHeads.innerHTML = innerText;
             }
         }
         xhr.send();

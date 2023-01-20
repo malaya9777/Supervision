@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const majorHead = require('../../models/majorHead')
-const minorHead = require('../../models/minorHead')
+const subHead = require('../../models/subHead')
 
 router.get('/',async(req,res)=>{
     const majorHeads = await majorHead.aggregate([
-        {$lookup:{from:'minorheads',localField:'_id', foreignField:'majorHeadID', as:'minorHeads'}}
+        {$lookup:{from:'subheads',localField:'_id', foreignField:'majorHeadID', as:'subHeads'}}
     ]);
     
     console.log(majorHeads)
@@ -25,9 +25,9 @@ router.post('/create/majorHead', async(req, res)=>{
     res.redirect('/configuration/head')
 });
 
-router.post('/create/minorHead', async(req, res)=>{
+router.post('/create/subHead', async(req, res)=>{
     const {majorHeadID, name} = req.body;
-    const new_head = new minorHead({
+    const new_head = new subHead({
         majorHeadID:majorHeadID,
         name: name
     });
@@ -39,11 +39,7 @@ router.post('/create/minorHead', async(req, res)=>{
     res.redirect('/configuration/head')
 });
 
-router.post('/minor', async(req, res)=>{
-    const {majorHeadID, minorHead} = req.body;
-    
-    res.redirect('/configuration/head');
-})
+
 
 
 

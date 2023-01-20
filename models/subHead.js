@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const minorHeadSchema = mongoose.Schema({
+const subHeadSchema = mongoose.Schema({
     majorHeadID:{
         type:mongoose.Schema.Types.ObjectId,
         require:true,
@@ -15,4 +15,4 @@ const minorHeadSchema = mongoose.Schema({
 
 },{timestamps:true});
 
-module.exports =  mongoose.model('MinorHead',minorHeadSchema);
+module.exports =  mongoose.model('SubHead',subHeadSchema);

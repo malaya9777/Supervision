@@ -22,12 +22,12 @@
             </h2>
             <div id="ID<%= i._id %>" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
               <div class="accordion-body bg-lite">
-                <form action="/configuration/head/create/minorHead" method="POST">
+                <form action="/configuration/head/create/subHead" method="POST">
                     <div class="row mt-2">
                         <div class="col-lg-3">
                             <input type="hidden" name="majorHeadID" id="majorHeadID" value="<%= i._id%>">
                             <input type="text" name="name" id="name" required class="form-control"
-                                placeholder="Minor Head" autocomplete="off" />
+                                placeholder="Sub Head" autocomplete="off" />
                         </div>
                         <div class="col-lg-3">
                             <button type="submit" class="btn btn-sm btn-primary">Add</button>
@@ -37,7 +37,7 @@
                 <div class="row mt-2">
                     <div class="col-md-4">
                         <div class="list-group list-group-numbered">
-                                <% i.minorHeads.forEach((m,o)=>{%>
+                                <% i.subHeads.forEach((m,o)=>{%>
                                     <div class="list-group-item"><%= m.name %></div>
                                 <%})%>
                                              

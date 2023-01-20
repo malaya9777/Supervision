@@ -7,7 +7,6 @@ const officerSchema = mongoose.Schema({
         trim:true,
         require:true,
     },
-
     designation:{
         type:String,
         trim:true,
