@@ -9,13 +9,23 @@ const { ObjectID } = require('mongodb');
 router.get('/getSupervisionDetails/:id', async (req, res) => {
     let id = req.params['id'];
     const records = await record.findOne({_id:id})
-    .populate({ path: 'majorHead', select: 'name' })
-    .populate({ path: 'subHead', select: 'name' })
     .populate({ path: 'supervisionDetails', populate:{path:'caseType', select:'name'}})
     .populate({ path: 'supervisionDetails', populate:{path:'investigatingOfficer'}})
     .populate({ path: 'supervisionDetails', populate:{path:'supervisingOfficer'}});
     res.send(records.supervisionDetails);
     return;
+});
+
+router.get('/getCategories/:id', async(req, res)=>{
+    let id = req.params['id'];
+    const records = await record.findById(id)
+    .populate({path:'categories', populate:{path:'category'}});
+    if(records.categories){
+        res.send(records.categories);
+    }else{
+        res.send()
+    }
+
 });
 
 router.post('/check', async (req, res) => {

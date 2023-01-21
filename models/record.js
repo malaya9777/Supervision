@@ -1,99 +1,107 @@
 const mongoose = require("mongoose");
 
 const record = mongoose.Schema({
-    ps:{
+    ps: {
         type: mongoose.Schema.Types.ObjectId,
-        require:true,
-        ref:'PS'
+        require: true,
+        ref: 'PS'
     },
-    caseNo:{
-        type:Number,
-        trim:true,
-        require:true
+    caseNo: {
+        type: Number,
+        trim: true,
+        require: true
     },
-    caseDate:{
-        type:Date,
-        require:true
+    caseDate: {
+        type: Date,
+        require: true
     },
-    sections:{
-        type:String,
-        require:true
+    sections: {
+        type: String,
+        require: true
     },
-    majorHead:{
-        type:mongoose.Schema.Types.ObjectId,
-        require:true,
-        ref:'MajorHead'
+    majorHead: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: 'MajorHead'
     },
-    subHead:{
-        type:mongoose.Schema.Types.ObjectId,
-        require:true,
-        ref:'SubHead'
+    subHead: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: 'SubHead'
     },
-    supervisionDetails:[{
-        caseType:{
+    categories: [{
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            unique: true,
+            require: true,
+            ref: 'Category'
+        }
+    }],
+    supervisionDetails: [{
+        caseType: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Type',
-            require:true
+            require: true
         },
-        investigatingOfficer:{
+        investigatingOfficer: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Officer',
-            require:true
+            require: true
         },
-        supervisingOfficer:{
+        supervisingOfficer: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Officer',
-            require:true
+            require: true
         },
-        dateOfAssignment:{
-            type:Date,
-            require:true
+        dateOfAssignment: {
+            type: Date,
+            require: true
         },
-        status:{
-            type:Boolean,
-            default:false
+        status: {
+            type: Boolean,
+            default: false
         },
-        timeStamp:{
-            type:Date,
+        timeStamp: {
+            type: Date,
             default: new Date()
         }
-    }],    
-    courtDetails:[{
-        courtSLNo:[
+    }],
+    courtDetails: [{
+        courtSLNo: [
             {
-                serialType:{
-                    type:mongoose.Schema.Types.ObjectId,
-                    ref:'CourtSLNo'
+                serialType: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'CourtSLNo'
                 },
-                serialNo:{
-                    type:Number
+                serialNo: {
+                    type: Number
                 },
-                serialYear:{
-                    type:Number
+                serialYear: {
+                    type: Number
                 },
-                remarks:{
-                    type:String
+                remarks: {
+                    type: String
                 },
-                timeStamp:{
-                    type:Date,
+                timeStamp: {
+                    type: Date,
                     default: new Date()
                 }
             }
         ],
-        dateOfJudgement:{
-            type:Date
+        dateOfJudgement: {
+            type: Date
         },
-        dateOfReceipt:{
-            type:Date
+        dateOfReceipt: {
+            type: Date
         },
-        pronouncedBy:{
-            type:String
+        pronouncedBy: {
+            type: String
         },
-        natureOfJudgmenet:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'JudgementType'
+        natureOfJudgmenet: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'JudgementType'
         }
     }],
-    
-},{timestamps:true});
-module.exports =mongoose.model('Record', record);
+
+}, { timestamps: true });
+module.exports = mongoose.model('Record', record);

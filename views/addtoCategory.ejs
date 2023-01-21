@@ -1,0 +1,142 @@
+<div class="alert alert-danger fade" id="alert" role="alert">
+    <strong id="alert_title">Alert Title</strong>
+    <div id="alert_message">Alert Message</div>
+</div>
+<h6>Add to Category</h6>
+<div class="row">
+    <div class="col-sm-2">
+        <label for="ps">Police Station</label>
+        <select name="ps" id="ps" class="form-select" required onchange="check()">
+            <option value="">Select Police Station</option>
+            <% data.ps_list.forEach((d,i)=>{ %>
+                <option value="<%= d._id%>">
+                    <%= d.name%>
+                </option>
+                <% })%>
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <label for="caseNo">Case No</label>
+        <input type="number" name="caseNo" min="1" id="caseNo" class="form-control" placeholder="Case No" required
+            onchange="check()">
+    </div>
+    <div class="col-sm-2">
+        <label for="caseDate">Case Year</label>
+        <input type="number" name="caseDate" id="caseDate" min="2000" max="3000" class="form-control"
+            placeholder="Case Year" required onchange="check()">
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-lg-12">
+        <div id="categoryPanel" style="pointer-events:none;" class="card bg-secondary mb-3">
+            <div class="card-header">Add to Category</div>
+            <div class="card-body">
+                <form method="post" action="/addtoCategory">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="hidden" name="rec_id" id="rec_id">
+                            <select name="category" id="category" class="form-control">
+                                <option>Select Category</option>
+                                <% data.category_list.forEach((d,i)=>{ %>
+                                    <option value="<%= d._id%>">
+                                        <%= d.name%>
+                                    </option>
+                                    <% })%>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary">Add</button>
+                        </div>
+                    </div>               
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="col-sm-3">
+                    <div class="list-group">
+                        <div class="list-group-item list-group-item-action">Test</div>
+                    </div>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let alertPanel = document.getElementById('alert');
+    function check() {
+        let categoryPanel = document.getElementById('categoryPanel');
+        let ps = document.getElementById('ps');
+        let caseNo = document.getElementById('caseNo');
+        let caseDate = document.getElementById('caseDate');
+        let rec_id = document.getElementById('rec_id');
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/check");
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.response) {
+                    let data = JSON.parse(xhr.response);
+                    rec_id.value = data._id;
+                    populateCategories(data._id);
+                    categoryPanel.style.pointerEvents = 'all';
+                    categoryPanel.classList.add('border-primary');
+                    categoryPanel.classList.remove('bg-secondary');
+                    alertPanel.classList.remove('show');
+                    return;
+                } else {
+                    if (ps.value && caseNo.value && caseDate.value) {
+                        setAlert(`${ps.options[ps.selectedIndex].text} PS Case No.${caseNo.value}/${new Date(caseDate.value).getFullYear()} does not exist in the database.`, 'If you want to add this record click on the blue button.', true, `\addRecord?ps=${ps.value}&caseNo=${caseNo.value}&caseDate=${caseDate.value}`)
+                        categoryPanel.style.pointerEvents = 'none';
+                        categoryPanel.classList.remove('border-primary')
+                        categoryPanel.classList.add('bg-secondary')
+                        alertPanel.classList.add('show');
+                        document.getElementById('supervisionTable').innerHTML = '';
+                        return;
+                    }
+                }
+            }
+        };
+        xhr.send(`ps=${ps.value}&caseNo=${caseNo.value}&caseDate=${caseDate.value}`);
+    }
+
+    function populateCategories(id){
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/getCategories/"+id);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.response) {
+                    let data = JSON.parse(xhr.response)
+                    data.forEach((data, i)=>{
+                        
+                    })
+                }else{
+
+                }
+            }
+        }
+
+    }
+
+    function setAlert(alert_title, alert_message, addButton = false, href) {
+        document.getElementById('alert_title').innerText = alert_title;
+        document.getElementById('alert_message').innerText = alert_message;
+
+        if (addButton) {
+            let alertDiv = document.getElementById('alert');
+            let addBtn = document.getElementById('addBtn');
+            if (addBtn) {
+                addBtn.href = href;
+            } else {
+                let addBtn = document.createElement('a');
+                addBtn.id = 'addBtn';
+                addBtn.classList.add('btn', 'btn-primary', 'btn-sm', 'mt-2');
+                addBtn.innerText = 'Click here to add';
+                addBtn.href = href;
+                alertDiv.appendChild(addBtn);
+            }
+        }
+    }
+</script>
