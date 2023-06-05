@@ -72,7 +72,7 @@ router.get('/setSupervisionStatus/:id/:status', async(req, res)=>{
     let id = req.params['id'];
     let status = req.params['status']
     try {
-        let data = await record.updateOne({"supervisionDetails._id": id}, {$set:{"supervisionDetails.$.status":status}});
+        await record.updateOne({"supervisionDetails._id": id}, {$set:{"supervisionDetails.$.status":status}});
         return res.status(200).send('success');
     } catch (error) {
         return res.status(404).send('');
