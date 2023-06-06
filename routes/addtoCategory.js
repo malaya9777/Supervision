@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const ps = require('../models/ps');
 const category = require('../models/category');
-const record = require('../models/record')
+const record = require('../models/record');
+const { ObjectId, ObjectID } = require('mongodb');
 
 
 router.get('/', async(req, res)=>{
@@ -14,8 +15,12 @@ router.get('/', async(req, res)=>{
 router.post('/', async(req, res)=>{
     let {rec_id, category} = req.body;
     try {
-        await record.findByIdAndUpdate(rec_id, {$push:{categories:{category}}});
-        return res.send('success');        
+        const exist = await record.find({_id: rec_id, "categories.category": category}).count();
+        if(exist==0){
+            await record.findByIdAndUpdate(rec_id, {$push:{categories:{category}}});
+            return res.send('success');         }
+               
+        return res.send('already exist')
     } catch (error) {
         return res.send(error);
     }   
@@ -23,10 +28,9 @@ router.post('/', async(req, res)=>{
 
 router.post('/remove' , async(req, res)=>{
     let {id, rec_id} = req.body;
-    console.log(req.body, id, rec_id);
     try {
-        await record.findByIdAndUpdate(rec_id, {$pop:{"categories.$._id":id}});
-        return res.send('success');
+        let data = await record.findByIdAndUpdate(rec_id, {$pull:{categories:{_id:id}}});
+        return res.send(id);
     } catch (error) {
         return res.send(error);
     }

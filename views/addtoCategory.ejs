@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <input type="hidden" name="rec_id" id="rec_id">
-                            <select name="category" id="category" class="form-control">
+                            <select name="category" id="category" class="form-control" required>
                                 <option>Select Category</option>
                                 <% data.category_list.forEach((d,i)=>{ %>
                                     <option value="<%= d._id%>">
@@ -74,6 +74,12 @@
             if (xhr.readyState === 4 && xhr.status === 200) {
                 if(xhr.response == 'success'){
                     populateCategories(rec_id.value)
+                }else{
+                    setAlert("Failed to add!", xhr.response);
+                    alertPanel.classList.add('show');
+                    setTimeout(() => {
+                        resetAlert()
+                    }, 8000);
                 }
             }
         }
@@ -98,7 +104,7 @@
                     categoryPanel.style.pointerEvents = 'all';
                     categoryPanel.classList.add('border-primary');
                     categoryPanel.classList.remove('bg-secondary');
-                    alertPanel.classList.remove('show');
+                    resetAlert();
                     return;
                 } else {
                     if (ps.value && caseNo.value && caseDate.value) {
@@ -106,7 +112,6 @@
                         categoryPanel.style.pointerEvents = 'none';
                         categoryPanel.classList.remove('border-primary')
                         categoryPanel.classList.add('bg-secondary')
-                        alertPanel.classList.add('show');
                         document.getElementById('categories').innerHTML = '';
                         return;
                     }
@@ -142,16 +147,20 @@
 
     }
     function remove(obj){
-        let id = obj.getAttribute('data-id');
-        let rec_id = obj.getAttribute('data-rec-id');
-        console.log(id, rec_id)
+        let id = obj.getAttribute("data-id");
+        let rec_id = obj.getAttribute("data-rec-id");
+        
+
+
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', '/addtoCategory/remove');
-        xhr.setRequestHeader('Contenct-type', 'application/x-www-form-urlencoded');
+        xhr.open("POST", "/addtoCategory/remove");
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = ()=>{
             if(xhr.readyState === 4 && xhr.status == 200){
                 if(xhr.response){
-                    console.log(xhr.response);
+                    if(xhr.response === id){
+                        obj.parentElement.parentElement.removeChild(obj.parentElement)
+                    }
                 }
             }
         }
@@ -159,6 +168,7 @@
     }
 
     function setAlert(alert_title, alert_message, addButton = false, href) {
+        alertPanel.classList.add('show');
         document.getElementById('alert_title').innerText = alert_title;
         document.getElementById('alert_message').innerText = alert_message;
 
@@ -174,7 +184,14 @@
                 addBtn.innerText = 'Click here to add';
                 addBtn.href = href;
                 alertDiv.appendChild(addBtn);
+                
             }
         }
+    }
+    function resetAlert(){
+        document.getElementById('alert_title').innerText = "";
+        document.getElementById('alert_message').innerText = "";
+        alertPanel.classList.remove('show');
+
     }
 </script>
