@@ -191,7 +191,13 @@
     function resetAlert(){
         document.getElementById('alert_title').innerText = "";
         document.getElementById('alert_message').innerText = "";
+        let addBtn = document.getElementById('addBtn');
+        if(addBtn){
+            addBtn.parentElement.removeChild(addBtn);
+        }
+
         alertPanel.classList.remove('show');
+
 
     }
 </script>

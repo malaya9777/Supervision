@@ -32,7 +32,6 @@ const record = mongoose.Schema({
     categories: [{
         category: {
             type: mongoose.Schema.Types.ObjectId,
-            unique: true,
             require: true,
             ref: 'Category'
         }

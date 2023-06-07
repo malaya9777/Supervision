@@ -163,7 +163,7 @@
                         <th>IO Name</th>
                         <th>SO Name</th>
                         <th>Assigned On</th>
-                        <th>Set to</th>
+                        <th>Status</th>
                         </tr>`;
                     data.forEach((o,i)=>{
                         tr +=`<tr class='${o.status?'table-success':'table-danger'}'>
@@ -172,7 +172,7 @@
                             <td>${o.investigatingOfficer.name}, ${o.investigatingOfficer.designation}</td>
                             <td>${o.supervisingOfficer.name}, ${o.supervisingOfficer.designation}</td>
                             <td>${new Date(o.dateOfAssignment).getDate()}-${new Date(o.dateOfAssignment).getMonth()}-${new Date(o.dateOfAssignment).getFullYear()}</td>
-                            <td width="180px"><button class='btn ${o.status?'btn-danger':'btn-success'}' onclick='setStatus("${o._id}","${!o.status}")'>${o.status?'Pending':'Uploaded'}</button></td>
+                            <td width="180px"><button class='btn ${o.status?'btn-success':'btn-danger'}' onclick='setStatus("${o._id}","${!o.status}")'>${o.status?'Uploaded':'Pending'}</button></td>
                             </tr>`;
                     });
 
