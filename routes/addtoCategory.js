@@ -14,8 +14,13 @@ router.get('/', async(req, res)=>{
 
 router.post('/', async(req, res)=>{
     let {rec_id, category} = req.body;
+    
     try {
+        if(category=='Select Category'){
+            return res.send('Select a Category')
+        }
         const exist = await record.find({_id: rec_id, "categories.category": category}).count();
+        
         if(exist==0){
             await record.findByIdAndUpdate(rec_id, {$push:{categories:{category}}});
             return res.send('success');         }
