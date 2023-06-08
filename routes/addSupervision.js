@@ -25,5 +25,14 @@ router.post('/', async(req, res)=>{
     res.redirect('/addSupervision')
 });
 
+router.post('/remove', async(req, res)=>{
+    let {id, rec_id} = req.body;
+    try {
+        await record.findByIdAndUpdate(rec_id, {$pull:{supervisionDetails:{_id:id}}});
+        return res.send(id);
+    } catch (error) {
+        return res.send(error);
+    }
+})
 
 module.exports = router;
