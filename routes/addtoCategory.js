@@ -34,7 +34,7 @@ router.post('/', async(req, res)=>{
 router.post('/remove' , async(req, res)=>{
     let {id, rec_id} = req.body;
     try {
-        let data = await record.findByIdAndUpdate(rec_id, {$pull:{categories:{_id:id}}});
+        await record.findByIdAndUpdate(rec_id, {$pull:{categories:{_id:id}}});
         return res.send(id);
     } catch (error) {
         return res.send(error);

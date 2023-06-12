@@ -15,7 +15,6 @@ router.get('/', async(req, res)=>{
 
 router.post('/', async(req, res)=>{
     let {rec_id, caseType, investigatingOfficer, supervisingOfficer, dateOfAssignment} = req.body;
-    console.log(req.body)
     try {
         await record.findByIdAndUpdate(rec_id, {$push:{supervisionDetails:{caseType:caseType, investigatingOfficer:investigatingOfficer, supervisingOfficer:supervisingOfficer, dateOfAssignment:dateOfAssignment}}});
         
@@ -27,6 +26,7 @@ router.post('/', async(req, res)=>{
 
 router.post('/remove', async(req, res)=>{
     let {id, rec_id} = req.body;
+    console.log('tiggred', req.body)
     try {
         await record.findByIdAndUpdate(rec_id, {$pull:{supervisionDetails:{_id:id}}});
         return res.send(id);
